@@ -36,7 +36,7 @@ LaTeXpert is a modern, AI-powered resume builder that helps professionals create
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/latexpert.git
+   git clone https://github.com/Tiwariji-07/vitae.ai.git
    cd latexpert
    ```
 
@@ -105,6 +105,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - [Next.js](https://nextjs.org/)
-- [shadcn/ui](https://ui.shadcn.com/)
 - [Firebase](https://firebase.google.com/)
 - [LaTeX](https://www.latex-project.org/)
