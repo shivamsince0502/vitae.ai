@@ -10,7 +10,8 @@ export const authMiddleware = async (
     const token = req.headers.authorization?.split('Bearer ')[1];
     
     if (!token) {
-      return res.status(401).json({ error: 'No token provided' });
+      res.status(401).json({ error: 'No token provided' });
+      return
     }
 
     const decodedToken = await auth.verifyIdToken(token);
@@ -19,6 +20,7 @@ export const authMiddleware = async (
   } catch (error) {
     console.error('Auth Error:', error);
     res.status(401).json({ error: 'Invalid token' });
+    return
   }
 };
 
