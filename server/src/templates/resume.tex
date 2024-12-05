@@ -1,0 +1,96 @@
+\documentclass[11pt,a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{hyperref}
+\usepackage{fontawesome5}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{xcolor}
+
+% Colors
+\definecolor{primary}{RGB}{0, 112, 201}
+\definecolor{secondary}{RGB}{102, 102, 102}
+
+% Hyperref setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primary,
+    urlcolor=primary
+}
+
+% Custom section formatting
+\titleformat{\section}
+    {\Large\bfseries}
+    {}{0em}
+    {\color{primary}}
+    [\color{primary}\titlerule]
+
+% Custom commands
+\newcommand{\resumeItem}[1]{
+    \item #1
+}
+
+\newcommand{\education}[5]{
+    \noindent
+    \textbf{#1} \hfill #4 \\
+    #2 \hfill #3 \\
+    #5
+    \vspace{0.5em}
+}
+
+\newcommand{\experience}[5]{
+    \noindent
+    \textbf{#1} \hfill #4 \\
+    \textit{#2} \hfill #3 \\
+    #5
+    \vspace{0.5em}
+}
+
+\newcommand{\project}[4]{
+    \noindent
+    \textbf{#1} \hfill #3 \\
+    \textit{#2} \\
+    #4
+    \vspace{0.5em}
+}
+
+\begin{document}
+
+% Header
+\begin{center}
+    {\Huge\textbf{{{name}}}}\\[0.5em]
+    \faEnvelope\ \href{mailto:{{email}}}{{{email}}} $|$
+    \faPhone\ {{phone}} $|$
+    \faMapMarker*\ {{location}}
+    {{#if linkedin}}
+    $|$ \faLinkedin\ \href{{{linkedin}}}{LinkedIn}
+    {{/if}}
+    {{#if github}}
+    $|$ \faGithub\ \href{{{github}}}{GitHub}
+    {{/if}}
+    {{#if portfolio}}
+    $|$ \faGlobe\ \href{{{portfolio}}}{Portfolio}
+    {{/if}}
+\end{center}
+
+% Education Section
+\section{Education}
+{{education}}
+
+% Experience Section
+\section{Experience}
+{{experience}}
+
+% Skills Section
+\section{Skills}
+{{skills}}
+
+% Projects Section
+\section{Projects}
+{{projects}}
+
+\end{document}
