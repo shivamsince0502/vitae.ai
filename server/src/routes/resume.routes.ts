@@ -1,12 +1,19 @@
 import { Router } from 'express';
-import { generateResume, enhanceContent, analyzeResume } from '../controllers/resume.controller';
-import { authMiddleware } from '../middleware/auth.middleware';
+import { 
+  uploadResume, 
+  generateResume, 
+  getTemplates 
+} from '../controllers/resume.controller';
 
 const router = Router();
 
-// Resume generation endpoints
-router.post('/generate', authMiddleware, generateResume);
-router.post('/enhance', authMiddleware, enhanceContent);
-router.post('/analyze', authMiddleware, analyzeResume);
+// Resume template routes
+router.get('/templates', getTemplates);
+
+// Resume upload route
+router.post('/upload', uploadResume);
+
+// Resume generation route
+router.post('/generate', generateResume);
 
 export default router;

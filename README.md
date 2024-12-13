@@ -58,7 +58,7 @@ LaTeXpert is a modern, AI-powered resume builder that helps professionals create
    NEXT_PUBLIC_FIREBASE_CONFIG=your_firebase_config
 
    # Backend (.env)
-   PORT=3001
+   PORT=3002
    FIREBASE_ADMIN_CONFIG=your_firebase_admin_config
    ```
 
@@ -68,7 +68,7 @@ LaTeXpert is a modern, AI-powered resume builder that helps professionals create
    cd frontend
    npm run dev
 
-   # Backend (http://localhost:3001)
+   # Backend (http://localhost:3002)
    cd server
    npm run dev
    ```

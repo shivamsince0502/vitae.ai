@@ -1,3 +1,5 @@
+// 'use client';
+
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
@@ -16,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={`${GeistSans.variable} ${GeistMono.variable} min-h-screen bg-background font-sans antialiased`}>
+      <body className={`${GeistSans.variable} ${GeistMono.variable} dark:bg-zinc-950 min-h-screen bg-background font-sans antialiased`}>
         <main className="relative flex min-h-screen flex-col">
           {children}
         </main>

@@ -60,6 +60,13 @@ function analyzePersonalInfo(personalInfo: any, analysis: any) {
       );
     }
   });
+
+  // Check for professional summary
+  if (!personalInfo.summary || personalInfo.summary.length < 50) {
+    analysis.feedback.sections.personalInfo.push(
+      'Consider adding a professional summary to highlight your experience and skills'
+    );
+  }
 }
 
 function analyzeEducation(education: any[], analysis: any) {
@@ -81,6 +88,13 @@ function analyzeEducation(education: any[], analysis: any) {
     // Bonus for GPA if it's good
     if (edu.gpa && parseFloat(edu.gpa) >= 3.5) {
       analysis.score += 5;
+    }
+
+    // Check for relevant coursework
+    if (!edu.coursework || edu.coursework.length < 3) {
+      analysis.feedback.sections.education.push(
+        'Consider adding relevant coursework to demonstrate your skills'
+      );
     }
   });
 }
@@ -119,6 +133,13 @@ function analyzeExperience(experience: any[], analysis: any) {
         }
       });
     }
+
+    // Check for achievements
+    if (!exp.achievements || exp.achievements.length < 2) {
+      analysis.feedback.sections.experience.push(
+        'Consider adding achievements to demonstrate your impact'
+      );
+    }
   });
 }
 
@@ -144,6 +165,13 @@ function analyzeSkills(skills: any[], analysis: any) {
         `Empty skill category: ${skillGroup.category}`
       );
       analysis.score -= 5;
+    }
+
+    // Check for proficiency levels
+    if (!skillGroup.proficiency || skillGroup.proficiency.length < 2) {
+      analysis.feedback.sections.skills.push(
+        'Consider adding proficiency levels to demonstrate your expertise'
+      );
     }
   });
 }
@@ -176,6 +204,13 @@ function analyzeProjects(projects: any[], analysis: any) {
     if (!project.technologies || project.technologies.length < 2) {
       analysis.feedback.sections.projects.push(
         'List more technologies used in projects'
+      );
+    }
+
+    // Check for outcomes
+    if (!project.outcomes || project.outcomes.length < 2) {
+      analysis.feedback.sections.projects.push(
+        'Consider adding outcomes to demonstrate the impact of your projects'
       );
     }
   });

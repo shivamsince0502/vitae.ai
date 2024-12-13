@@ -1,27 +1,22 @@
 import { Request, Response, NextFunction } from 'express';
-import { auth } from '../config/firebase-admin';
+import jwt from 'jsonwebtoken';
 
-export const authMiddleware = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const token = req.headers.authorization?.split('Bearer ')[1];
-    
-    if (!token) {
-      res.status(401).json({ error: 'No token provided' });
-      return
-    }
+export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.headers.authorization?.split('Bearer ')[1];
 
-    const decodedToken = await auth.verifyIdToken(token);
-    req.user = decodedToken;
-    next();
-  } catch (error) {
-    console.error('Auth Error:', error);
-    res.status(401).json({ error: 'Invalid token' });
+  if (!token) {
+    res.status(401).json({ error: 'No token provided' });
     return
   }
+
+  jwt.verify(token, process.env.JWT_SECRET!, (err, decoded) => {
+    if (err) {
+      res.status(401).json({ error: 'Invalid token' });
+      return
+    }
+    req.user = decoded;
+    next();
+  });
 };
 
 // Extend Express Request type to include user

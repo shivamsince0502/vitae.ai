@@ -1,77 +1,18 @@
 import { ResumeData } from '../types/resume';
 import fs from 'fs/promises';
 import path from 'path';
+import { generateLatexContent } from './ai.service';
 
 export async function generateLatexResume(resumeData: ResumeData): Promise<string> {
   try {
-    // Load LaTeX template
-    const templatePath = path.join(__dirname, '../templates/resume.tex');
-    const template = await fs.readFile(templatePath, 'utf-8');
-
-    // Replace placeholders with actual data
-    let latexContent = template;
+    // Generate LaTeX content using AI
+    const latexContent = await generateLatexContent(resumeData);
     
-    // Personal Information
-    latexContent = latexContent.replace('{{name}}', resumeData.personalInfo.name);
-    latexContent = latexContent.replace('{{email}}', resumeData.personalInfo.email);
-    latexContent = latexContent.replace('{{phone}}', resumeData.personalInfo.phone);
-    latexContent = latexContent.replace('{{location}}', resumeData.personalInfo.location);
-    
-    // Education Section
-    let educationContent = '';
-    for (const edu of resumeData.education) {
-      educationContent += `\\education
-      {${edu.degree}}
-      {${edu.school}}
-      {${edu.location}}
-      {${edu.startDate} - ${edu.endDate}}
-      {${edu.gpa ? `GPA: ${edu.gpa}` : ''}}
-      `;
-    }
-    latexContent = latexContent.replace('{{education}}', educationContent);
-    
-    // Experience Section
-    let experienceContent = '';
-    for (const exp of resumeData.experience) {
-      let bulletPoints = exp.description
-        .map(point => `\\item ${point}`)
-        .join('\n');
-        
-      experienceContent += `\\experience
-      {${exp.position}}
-      {${exp.company}}
-      {${exp.location}}
-      {${exp.startDate} - ${exp.endDate}}
-      {\\begin{itemize}
-        ${bulletPoints}
-      \\end{itemize}}
-      `;
-    }
-    latexContent = latexContent.replace('{{experience}}', experienceContent);
-    
-    // Skills Section
-    const skillsContent = resumeData.skills
-      .map(skill => `\\textbf{${skill.category}:} ${skill.items.join(', ')}`)
-      .join(' \\\\[0.5em] ');
-    latexContent = latexContent.replace('{{skills}}', skillsContent);
-    
-    // Projects Section
-    let projectsContent = '';
-    for (const project of resumeData.projects) {
-      let bulletPoints = project.description
-        .map(point => `\\item ${point}`)
-        .join('\n');
-        
-      projectsContent += `\\project
-      {${project.name}}
-      {${project.technologies.join(', ')}}
-      {${project.startDate} - ${project.endDate}}
-      {\\begin{itemize}
-        ${bulletPoints}
-      \\end{itemize}}
-      `;
-    }
-    latexContent = latexContent.replace('{{projects}}', projectsContent);
+    // Write the generated content to a temporary file
+    const tempDir = path.join(__dirname, '../temp');
+    await fs.mkdir(tempDir, { recursive: true });
+    const tempFile = path.join(tempDir, 'resume.tex');
+    await fs.writeFile(tempFile, latexContent);
 
     return latexContent;
   } catch (error) {
