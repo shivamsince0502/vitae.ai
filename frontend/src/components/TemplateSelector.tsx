@@ -80,7 +80,7 @@ export default function TemplateSelector({ onSelect }: TemplateSelectorProps) {
           >
             <div className="aspect-[3/4] relative">
               <img
-                src={template.preview}
+                src={"http://localhost:3002" + template.preview}
                 alt={template.name}
                 className="absolute inset-0 w-full h-full object-cover"
               />

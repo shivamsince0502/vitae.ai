@@ -1,16 +1,16 @@
-# LaTeXpert - AI-Powered Resume Builder
+# Resume-AI-LaTeX
 
-LaTeXpert is a modern, AI-powered resume builder that helps professionals create beautiful, ATS-friendly resumes using LaTeX technology. Built with Next.js 14 and TypeScript, it offers an intuitive interface while leveraging the power of AI to enhance resume content.
+An AI-powered resume builder that generates professional LaTeX resumes with real-time preview and editing capabilities. The application allows users to either upload their existing resume or fill out a form, and then uses AI to generate a beautifully formatted LaTeX resume with multiple template options.
 
 ## 🌟 Features
 
-- **AI-Powered Content Enhancement**: Get smart suggestions to improve your resume content
-- **LaTeX-Based PDF Generation**: Professional, perfectly formatted resumes
-- **Multi-Step Form Interface**: Easy-to-use, intuitive resume creation process
-- **Real-Time Preview**: See your changes instantly
-- **ATS-Friendly**: Ensures your resume passes Applicant Tracking Systems
-- **Dark Mode Support**: Comfortable editing experience
-- **Responsive Design**: Works on all devices
+- **Multiple Input Methods**: Upload existing resume (PDF/DOCX) or fill out a structured form
+- **AI-Powered Content Generation**: Automatically converts raw resume text into professional LaTeX format
+- **Multiple LaTeX Templates**: Choose from Professional, Modern, Academic, and Creative templates
+- **Real-Time LaTeX Editor**: Built-in Monaco editor with LaTeX syntax highlighting
+- **Live PDF Preview**: Instantly see how your resume looks as you make changes
+- **ATS-Friendly Output**: Ensures your resume is readable by Applicant Tracking Systems
+- **One-Click Download**: Easily download your resume as a PDF
 
 ## 🚀 Tech Stack
 
@@ -20,90 +20,132 @@ LaTeXpert is a modern, AI-powered resume builder that helps professionals create
 - TypeScript
 - Tailwind CSS
 - shadcn/ui components
+- Monaco Editor for LaTeX editing
+- react-pdf for PDF preview
 
 ### Backend
 - Node.js
 - Express
 - TypeScript
-- Firebase Admin SDK
+- OpenAI API for AI-powered content generation
+- LaTeX compilation system
 
-### Infrastructure
-- Firebase Authentication
-- Firebase Storage
-- LaTeX Engine
+## 🛠️ Prerequisites
 
-## 🛠️ Installation
+Before you begin, ensure you have the following installed:
+- Node.js (v18 or higher)
+- npm or yarn
+- LaTeX distribution (TeX Live recommended)
+  - For macOS: Install MacTeX
+  - For Linux: Install TeX Live
+  - For Windows: Install MiKTeX
+
+## 📥 Installation
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Tiwariji-07/vitae.ai.git
-   cd vitae.ai
+   git clone https://github.com/yourusername/resume-ai-latex.git
+   cd resume-ai-latex
    ```
 
-2. Install dependencies:
+2. Install frontend dependencies:
    ```bash
-   # Install frontend dependencies
    cd frontend
    npm install
+   ```
 
-   # Install backend dependencies
+3. Install backend dependencies:
+   ```bash
    cd ../server
    npm install
    ```
 
-3. Set up environment variables:
-   ```bash
-   # Frontend (.env.local)
-   NEXT_PUBLIC_API_URL=http://localhost:3001
-   NEXT_PUBLIC_FIREBASE_CONFIG=your_firebase_config
+4. Set up environment variables:
 
-   # Backend (.env)
-   PORT=3002
-   FIREBASE_ADMIN_CONFIG=your_firebase_admin_config
+   Frontend (.env.local):
+   ```env
+   NEXT_PUBLIC_API_URL=http://localhost:3002
    ```
 
-4. Run the development servers:
-   ```bash
-   # Frontend (http://localhost:3000)
-   cd frontend
-   npm run dev
+   Backend (.env):
+   ```env
+   PORT=3002
+   OPENAI_API_KEY=your_openai_api_key
+   ```
 
-   # Backend (http://localhost:3002)
+5. Create necessary directories:
+   ```bash
+   cd server/src
+   mkdir temp
+   mkdir uploads
+   ```
+
+## 🚀 Running the Application
+
+1. Start the backend server:
+   ```bash
    cd server
    npm run dev
    ```
+   The server will start on http://localhost:3002
+
+2. In a new terminal, start the frontend:
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+   The frontend will be available at http://localhost:3000
 
 ## 📁 Project Structure
 
 ```
-latexpert/
-├── frontend/              # Next.js frontend application
+resume-ai-latex/
+├── frontend/                # Next.js frontend application
 │   ├── src/
-│   │   ├── app/          # Next.js 14 app directory
-│   │   ├── components/   # React components
-│   │   ├── lib/         # Utility functions
-│   │   └── styles/      # Global styles
-│   └── public/          # Static assets
+│   │   ├── app/            # Next.js app router
+│   │   ├── components/     # React components
+│   │   │   ├── editor/     # LaTeX editor components
+│   │   │   └── preview/    # PDF preview components
+│   │   └── styles/        # Global styles
+│   └── public/            # Static assets
 │
-└── server/              # Express backend application
+└── server/                # Express backend application
     ├── src/
-    │   ├── controllers/ # Route controllers
-    │   ├── services/    # Business logic
-    │   ├── middleware/  # Custom middleware
-    │   └── templates/   # LaTeX templates
-    └── dist/           # Compiled TypeScript
+    │   ├── controllers/   # Route controllers
+    │   ├── services/      # Business logic
+    │   ├── templates/     # LaTeX templates
+    │   ├── temp/         # Temporary files
+    │   └── uploads/      # Uploaded files
+    └── dist/             # Compiled TypeScript
 ```
+
+## 🔄 Workflow
+
+1. **Input**:
+   - Upload an existing resume (PDF/DOCX)
+   - OR fill out the structured form
+
+2. **Template Selection**:
+   - Choose from multiple LaTeX templates
+   - Preview template styles before selection
+
+3. **AI Processing**:
+   - AI analyzes and structures the resume content
+   - Generates LaTeX code following the selected template
+
+4. **Editing**:
+   - Use the built-in LaTeX editor to make changes
+   - See real-time PDF preview of changes
+   - Syntax highlighting and auto-completion support
+
+5. **Output**:
+   - Download the final resume as a PDF
+   - ATS-friendly formatting ensured
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [Next.js](https://nextjs.org/)
-- [Firebase](https://firebase.google.com/)
-- [LaTeX](https://www.latex-project.org/)

@@ -1,48 +1,144 @@
-\begin{center}
-\textbf{\Huge \scshape John Doe} \\ \vspace{1pt}
-\small +1234567890 $|$ \href{mailto:john.doe@example.com}{\underline{john.doe@example.com}} $|$
-San Francisco, CA
-\end{center}
-
-\section{Education}
-\resumeSubHeadingListStart
-\resumeSubheading
-{Bachelor of Science in Computer Science}{August 2015 - May 2019}
-{University of California, Berkeley}{Berkeley, CA}
-\resumeItemListStart
-  \resumeItem{GPA: 3.8}
-\resumeItemListEnd
-\resumeSubHeadingListEnd
-
-\section{Experience}
-\resumeSubHeadingListStart
-\resumeSubheading
-{Software Engineer}{June 2019 - Present}
-{Tech Solutions Inc.}{San Francisco, CA}
-\resumeItemListStart
-  \resumeItem{Developed web applications using React and Node.js}
-  \resumeItem{Collaborated with cross-functional teams to deliver projects on time}
-  \resumeItem{Implemented RESTful APIs and integrated third-party services}
-\resumeItemListEnd
-\resumeSubHeadingListEnd
-
-\section{Technical Skills}
-\begin{itemize}[leftmargin=0.15in, label={}]
-\small{\item{
-\textbf{Programming Languages}{: JavaScript, Python, Java}
-}}
-\small{\item{
-\textbf{Frameworks}{: React, Node.js, Express}
-}}
-\end{itemize}
-
-\section{Projects}
-\resumeSubHeadingListStart
-\resumeProjectHeading
-{\textbf{Personal Portfolio Website}}{January 2020 - March 2020}
-\resumeItemListStart
-\resumeItem{Designed and developed a personal portfolio website to showcase projects}
-\resumeItem{Implemented responsive design for optimal viewing on various devices}
-\resumeItem{Utilized modern web technologies to enhance user experience}
-\resumeItemListEnd
-\resumeSubHeadingListEnd
+\documentclass[letterpaper,10pt]{article}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\usepackage{bookmark}
+\usepackage{lastpage}
+\usepackage{CormorantGaramond}
+\usepackage{charter}
+\usepackage{xcolor}
+\definecolor{accentTitle}{HTML}{0e6e55}
+\definecolor{accentText}{HTML}{0e6e55}
+\definecolor{accentLine}{HTML}{a16f0b}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\urlstyle{same}
+\addtolength{\oddsidemargin}{-0.7in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.19in}
+\addtolength{\topmargin}{-0.7in}
+\addtolength{\textheight}{1.4in}
+\setlength{\multicolsep}{-3.0pt}
+\setlength{\columnsep}{-1pt}
+\setlength{\tabcolsep}{0pt}
+\setlength{\footskip}{3.7pt}
+\raggedbottom
+\raggedright
+\input{glyphtounicode}
+\pdfgentounicode=1
+\newcommand{\documentTitle}[2]{
+  \begin{center}
+    {\Huge\color{accentTitle} #1}
+    \vspace{10pt}
+    {\color{accentLine} \hrule}
+    \vspace{2pt}
+    \footnotesize{#2}
+    \vspace{2pt}
+    {\color{accentLine} \hrule}
+  \end{center}
+}
+\newcommand{\documentFooter}[1]{
+  \setlength{\footskip}{10.25pt}
+  \fancyfoot[C]{\footnotesize #1}
+}
+\newcommand{\numberedPages}{
+  \documentFooter{\thepage/\pageref{LastPage}}
+}
+\titleformat{\section}{
+  \vspace{-5pt}
+  \color{accentText}
+  \raggedright\large\bfseries
+}{}{0em}{}[\color{accentLine}\titlerule]
+\newcommand{\tinysection}[1]{
+  \phantomsection
+  \addcontentsline{toc}{section}{#1}
+  {\large{\bfseries\color{accentText}#1} {\color{accentLine} |}}
+}
+\newcommand{\heading}[2]{
+  \hspace{10pt}#1\hfill#2\\
+}
+\newcommand{\headingBf}[2]{
+  \heading{\textbf{#1}}{\textbf{#2}}
+}
+\newcommand{\headingIt}[2]{
+  \heading{\textit{#1}}{\textit{#2}}
+}
+\newenvironment{resume_list}{
+  \vspace{-7pt}
+  \begin{itemize}[itemsep=-2px, parsep=1pt, leftmargin=30pt]
+}{
+  \end{itemize}
+}
+\newcommand{\itemTitle}[1]{
+  \item[] \underline{#1}\vspace{4pt}
+}
+\renewcommand\labelitemi{--}
+\begin{document}
+  \documentTitle{Vivek Raj}{
+    \href{tel:6304144730}{
+      \raisebox{-0.05\height} \faPhone\ 63041-44720} ~ | ~
+    \href{mailto:hirevivekraj@gmail.com}{
+      \raisebox{-0.15\height} \faEnvelope\ hirevivekraj@gmail.com} ~ | ~
+    \href{https://linkedin.com/in/USER/}{
+      \raisebox{-0.15\height} \faLinkedin\ LinkedIn} ~ | ~
+    \href{https://github.com/USER}{
+      \raisebox{-0.15\height} \faGithub\ Github}
+  }
+  \tinysection{Summary}
+  A passionate software engineer with experience in developing efficient web applications and a knack for learning new technologies.
+  \section{Experience}
+  \headingBf{Wavemaker Inc}{June 2023 – Present}
+  \headingIt{Associate Software Engineer}{Hyderabad, IN}
+  \begin{resume_list}
+    \item Exploring and learning emerging technologies, creating proof of concepts (POCs) to demonstrate capabilities to new customers.  This accelerated the onboarding process by 30%.
+    \item Maintain and enhance the company’s marketplace for sharing prefabs, themes, and connectors, ensuring 100% functionality in documentation and code while improving resource accessibility by 40%.
+    \item Conduct an in-depth assessment of React Native application performance, identifying 5+ critical limitations and implementing best practices that led to a smoother user interface, enhancing performance by 30%.
+    \item Developing an AI-powered chatbot using LLaMA3 and MedLLaMA2 models to streamline symptom analysis, department recommendation, and appointment booking, reducing appointment booking time by 30% and improving symptom analysis accuracy by 25%.
+  \end{resume_list}
+  \headingBf{Wavemaker Inc}{January 2023 – May 2023}
+  \headingIt{Web Developer Intern}{Hyderabad, IN}
+  \begin{resume_list}
+    \item Developed 20+ web pages using HTML, CSS, Bootstrap, and JavaScript, enhancing user interface and experience.
+    \item Architected a full-stack financial management system using HTML, Bootstrap, CSS, JavaScript, and Java, featuring automated expense tracking, bill reminders, and goal setting, improving task efficiency by 40%.
+    \item Implemented theme customization and flexible data export functionality, enhancing user experience and increasing user efficiency by 40%.
+    \item Engineered 34 REST API endpoints using Spring, enhancing application functionality and scalability, contributing to a 25% reduction in response times and improved overall system performance.
+  \end{resume_list}
+  \section{Projects}
+  \headingBf{Solana Wallet extension}{August 2024 - September 2024}
+  \begin{resume_list}
+    \item Built a Chrome extension for managing Solana (SOL) tokens, enabling seamless token transactions.  Improved management efficiency by 35%, enhancing user control over operations.
+    \item Established persistent wallet data storage, retaining wallet information across sessions and reloads, improving data reliability and reducing re-login frequency by 40%.
+    \item Integrated a tracking system for Solana transactions, allowing users to access detailed logs of over 1,000 transactions across the interface.
+  \end{resume_list}
+  \headingBf{Furnish}{March 2023 - April 2023}
+  \begin{resume_list}
+    \item Architected a cross-platform e-commerce application using React Native, enabling seamless user experiences on iOS and Android in 2 weeks.
+    \item Integrated 21 RESTful API endpoints using Express.js for secure user authentication, product management, order handling, and payments, improving scalability and reducing response times by 30%.
+    \item Constructed 14 screens and over 13 components, leveraging Formik and Yup for efficient form handling, reducing form validation time by 70% and improving overall user input accuracy.
+  \end{resume_list}
+  \section{Technical Skills}
+  \begin{multicols}{2}
+    \begin{itemize}[itemsep=-2px, parsep=1pt, leftmargin=75pt]
+      \item[\textbf{Languages}] Java, Python, SQL (MySQL), JavaScript, HTML/CSS, Typescript
+      \item[\textbf{Frameworks}] React, Node.js, ReactNative, Spring, Express.js
+      \item[\textbf{Databases}] MySQL, MongoDB, Firebase Firestore
+      \item[\textbf{Developer Tools}] Git, Docker, Jenkins, VS Code, IntelliJ, Eclipse, Postman
+    \end{itemize}
+  \end{multicols}
+  \section{Education}
+  \headingBf{Malla Reddy College of Engineering and Technology}{August 2019 - June 2023}
+  \headingIt{BTech in Computer Science and Engineering, CGPA: 8.38}{}
+  \section{Achievements and Certificates}
+  \begin{resume_list}
+    \item MongoDB Dev Toolkit:  Link
+    \item Leetcode:  (Highest Rating 1469 and solved 100+ problems).
+    \item Participated in 100xDevs Solana Mini Hackathon.
+  \end{resume_list}
+\end{document}

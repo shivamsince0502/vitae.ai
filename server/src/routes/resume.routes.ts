@@ -2,7 +2,8 @@ import { Router } from 'express';
 import { 
   uploadResume, 
   generateResume, 
-  getTemplates 
+  getTemplates,
+  compilePdf
 } from '../controllers/resume.controller';
 
 const router = Router();
@@ -15,5 +16,8 @@ router.post('/upload', uploadResume);
 
 // Resume generation route
 router.post('/generate', generateResume);
+
+// PDF compilation route
+router.post('/compile', compilePdf);
 
 export default router;

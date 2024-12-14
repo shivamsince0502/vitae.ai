@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import fileUpload from 'express-fileupload';
+import path from 'path';
 import resumeRoutes from './routes/resume.routes';
 // import userRoutes from './routes/user.routes';
 // import { connectToDatabase } from './config/mongodb';
@@ -27,6 +28,10 @@ app.use(fileUpload({
   responseOnLimit: 'File size limit exceeded',
   debug: true  // Add debug logging
 }));
+
+// Serve static files
+app.use('/temp', express.static(path.join(__dirname, 'temp')));
+app.use('/templates', express.static(path.join(__dirname, 'templates')));
 
 // Connect to MongoDB
 // connectToDatabase().catch(error => {

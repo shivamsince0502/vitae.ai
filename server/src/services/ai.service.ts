@@ -116,105 +116,78 @@ export async function analyzeResumeContent(resumeData: any): Promise<any> {
   }
 }
 
-export async function generateLatexContent(resumeData: ResumeData): Promise<string> {
+export async function generateLatexContent(resumeData: any, templateContent: string): Promise<any> {
   try {
-    const prompt = `Generate a professional LaTeX resume with the following data. Follow the style and structure of this high-scoring (ATS score: 85) resume example, but adapt it for the provided data. Return ONLY the LaTeX code as a plain string, without any markdown formatting or code blocks.
-
-Example resume structure to follow (notice the formatting, spacing, and section organization):
-
-\\begin{center}
-\\textbf{\\Huge \\scshape Name} \\\\ \\vspace{1pt}
-\\small Phone $|$ \\href{mailto:email}{\\underline{email}} $|$
-\\href{linkedin}{\\underline{LinkedIn}} $|$
-\\href{github}{\\underline{Github}}
-\\end{center}
-
-\\section{Experience}
-\\resumeSubHeadingListStart
-\\resumeSubheading
-{Position}{Date Range}
-{Company}{Location}
-\\resumeItemListStart
-  \\resumeItem{Achievement with metrics}
-\\resumeItemListEnd
-\\resumeSubHeadingListEnd
-
-\\section{Projects}
-\\resumeSubHeadingListStart
-\\resumeProjectHeading
-{\\textbf{Project Name} $|$ \\emph{Github: \\href{link}{\\underline{Repo}}}}{Date Range}
-\\resumeItemListStart
-\\resumeItem{Description with metrics}
-\\resumeItemListEnd
-\\resumeSubHeadingListEnd
-
-\\section{Technical Skills}
-\\begin{itemize}[leftmargin=0.15in, label={}]
-\\small{\\item{
-\\textbf{Category}{: Item1, Item2, Item3}
-}}
-\\end{itemize}
-
-Now, generate a resume using this structure with the following data:
+    let prompt;
     
-Personal Information:
-- Name: ${resumeData.personalInfo.name}
-- Email: ${resumeData.personalInfo.email}
-- Phone: ${resumeData.personalInfo.phone}
-- Location: ${resumeData.personalInfo.location}
-${resumeData.personalInfo.linkedin ? `- LinkedIn: ${resumeData.personalInfo.linkedin}` : ''}
-${resumeData.personalInfo.github ? `- GitHub: ${resumeData.personalInfo.github}` : ''}
-${resumeData.personalInfo.portfolio ? `- Portfolio: ${resumeData.personalInfo.portfolio}` : ''}
+    if (resumeData.rawText) {
+      // Handle raw text from uploaded resume
+      prompt = `Convert the following resume text into a professional LaTeX resume. Use the following template '${templateContent}'. The resume text is:
 
-Education:
-${resumeData.education.map(edu => `- ${edu.degree} from ${edu.school}
-  Location: ${edu.location}
-  Duration: ${edu.startDate} - ${edu.endDate}
-  ${edu.gpa ? `GPA: ${edu.gpa}` : ''}`).join('\n')}
-
-Experience:
-${resumeData.experience.map(exp => `- ${exp.position} at ${exp.company}
-  Location: ${exp.location}
-  Duration: ${exp.startDate} - ${exp.endDate}
-  Achievements:
-  ${exp.description.map(desc => `  - ${desc}`).join('\n')}`).join('\n')}
-
-Skills:
-${resumeData.skills.map(skill => `- ${skill.category}: ${skill.items.join(', ')}`).join('\n')}
-
-Projects:
-${resumeData.projects.map(project => `- ${project.name}
-  Technologies: ${project.technologies.join(', ')}
-  Duration: ${project.startDate} - ${project.endDate}
-  Details:
-  ${project.description.map(desc => `  - ${desc}`).join('\n')}`).join('\n')}
+${resumeData.rawText}
 
 Requirements:
-1. Follow the exact structure and formatting of the example resume
-2. Use the same command structure (\\resumeSubheading, \\resumeItem, etc.)
-3. Maintain consistent spacing and formatting
-4. Include metrics and quantifiable achievements in bullet points
-5. Ensure all hyperlinks are properly formatted
-6. Return ONLY the LaTeX code that goes between \\begin{document} and \\end{document}
-7. Return the code as a plain string, without any markdown formatting or code blocks`;
+1. Extract and organize information into appropriate sections
+2. Use appropriate LaTeX commands and formatting
+3. Ensure content is ATS-friendly
+4. Include all relevant information from the source text
+5. Return a Latex code which is following the template
+6. Return the content in a string format with LaTeX code.Without any other text.[no prose]`;
+    } else {
+      // Handle structured form data
+      prompt = `Generate a professional LaTeX resume using the following structured data. Use the following template '${templateContent}'.
 
-    const response = await openai.chat.completions.create({
+Personal Information:
+${JSON.stringify(resumeData.personalInfo, null, 2)}
+
+Education:
+${JSON.stringify(resumeData.education, null, 2)}
+
+Experience:
+${JSON.stringify(resumeData.experience, null, 2)}
+
+Skills:
+${JSON.stringify(resumeData.skills, null, 2)}
+
+Projects:
+${JSON.stringify(resumeData.projects, null, 2)}
+
+Requirements:
+1. Generate LaTeX code for each section
+2. Use appropriate LaTeX commands and formatting
+3. Ensure content is ATS-friendly
+4. Return a Latex code which is following the template
+5. Return the content in a string format with LaTeX code.Without any other text.[no prose]`;
+    }
+
+    const completion = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [
         {
           role: "system",
-          content: "You are a LaTeX code generator that creates resumes following a specific template structure. Output ONLY the raw LaTeX code without any markdown formatting, code blocks, or explanatory text. Generate only the content that goes between \\begin{document} and \\end{document}, following the exact formatting and command structure provided."
+          content: "You are an expert LaTeX resume generator. You create professional, ATS-friendly resumes using LaTeX formatting. You always return content in a string format with LaTeX code.[no prose]"
         },
         {
           role: "user",
           content: prompt
         }
       ],
-      temperature: 0.7,
-      max_tokens: 2000
+      temperature: 0.1,
+      max_tokens: 2000,
     });
 
-    return response.choices[0].message.content || '';
+    
+    const response = completion.choices[0].message.content || '';
+    // console.log('AI Response:', response);
+    try {
+      // Parse the JSON response
+      // const sections = JSON.parse(response);
+      // const resume = sections.latex_resume ??"";
+      return response.slice(1, -1);
+    } catch (error) {
+      console.error('Failed to parse AI response as JSON:', error);
+      throw new Error('Invalid AI response format');
+    }
   } catch (error) {
     console.error('AI LaTeX Generation Error:', error);
     throw new Error('Failed to generate LaTeX content using AI');
@@ -223,8 +196,8 @@ Requirements:
 
 export async function analyzeAndGenerateResume(input: any, templateId: string) {
   try {
-    let prompt: string;
-
+    let prompt;
+    
     // Debug logging of input
     console.log('AI Service Input:', JSON.stringify(input, null, 2));
 

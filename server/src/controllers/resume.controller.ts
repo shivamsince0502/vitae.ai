@@ -1,36 +1,29 @@
 import { Request, Response } from 'express';
 import { analyzeAndGenerateResume } from '../services/ai.service';
 import { parseResume } from '../services/parser.service';
+import { getTemplates as getLatexTemplates, generateLatexResume } from '../services/latex.service';
+import { compileLaTeX, cleanupTemp } from '../services/compiler.service';
 import { UploadedFile } from 'express-fileupload';
 import fs from 'fs';
+import path from 'path';
 
 // Available resume templates
-const templates = [
-  {
-    id: 'modern-minimal',
-    name: 'Modern Minimal',
-    description: 'Clean and professional layout with a focus on readability',
-    thumbnail: '/templates/modern-minimal.png'
-  },
-  {
-    id: 'creative-bold',
-    name: 'Creative Bold',
-    description: 'Vibrant design for creative professionals',
-    thumbnail: '/templates/creative-bold.png'
-  },
-  {
-    id: 'classic-elegant',
-    name: 'Classic Elegant',
-    description: 'Traditional and timeless resume format',
-    thumbnail: '/templates/classic-elegant.png'
-  }
-];
 
-export const getTemplates = (req: Request, res: Response) => {
-  res.json({
-    success: true,
-    templates: templates
-  });
+
+export const getTemplates = async (req: Request, res: Response) => {
+  try {
+    const latexTemplates = await getLatexTemplates();
+    res.json({
+      success: true,
+      templates: [...latexTemplates]
+    });
+  } catch (error) {
+    console.error('Get Templates Error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch templates'
+    });
+  }
 };
 
 export const uploadResume = async (req: Request, res: Response) => {
@@ -102,33 +95,66 @@ export const generateResume = async (req: Request, res: Response) => {
       });
     }
 
-    // Check if input is from form or parsed PDF
-    let inputForAI;
-    if (formData.personalInfo || formData.education || formData.experience || formData.skills) {
-      // Form data input
-      inputForAI = formData;
-    } else if (typeof formData === 'string') {
-      // PDF text input
-      inputForAI = formData;
-    } else {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Invalid input format' 
-      });
-    }
+    // Generate LaTeX content
+    const latexContent = await generateLatexResume(formData, templateId);
 
-    // Generate resume using AI service
-    const generatedResume = await analyzeAndGenerateResume(inputForAI, templateId);
+    // Compile LaTeX to PDF
+    const pdfPath = await compileLaTeX(latexContent);
+
+    // Create a URL for the PDF
+    const pdfUrl = `/temp/${path.basename(pdfPath)}`;
+
+    // Schedule cleanup after 5 minutes
+    setTimeout(() => {
+      cleanupTemp().catch(console.error);
+    }, 5 * 60 * 1000);
 
     res.json({
       success: true,
-      content: generatedResume
+      latexContent,
+      pdfUrl
     });
   } catch (error) {
     console.error('Resume Generation Error:', error);
-    res.status(500).json({ 
-      success: false, 
+    res.status(500).json({
+      success: false,
       message: 'Failed to generate resume',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+};
+
+export const compilePdf = async (req: Request, res: Response) => {
+  try {
+    const { latex } = req.body;
+
+    if (!latex) {
+      return res.status(400).json({
+        success: false,
+        message: 'No LaTeX content provided'
+      });
+    }
+
+    // Compile LaTeX to PDF
+    const pdfPath = await compileLaTeX(latex);
+
+    // Create a URL for the PDF
+    const pdfUrl = `/temp/${path.basename(pdfPath)}`;
+
+    // Schedule cleanup after 5 minutes
+    setTimeout(() => {
+      cleanupTemp().catch(console.error);
+    }, 5 * 60 * 1000);
+
+    res.json({
+      success: true,
+      pdfUrl
+    });
+  } catch (error) {
+    console.error('PDF Compilation Error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to compile PDF',
       error: error instanceof Error ? error.message : 'Unknown error'
     });
   }

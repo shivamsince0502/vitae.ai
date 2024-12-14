@@ -1,0 +1,48 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{fontawesome}
+\usepackage{titlesec}
+\usepackage{enumitem}
+
+% Custom commands
+\newcommand{\resumeSection}[1]{
+  \vspace{-2pt}
+  \titleformat{\section}{\Large\bfseries\raggedright}{}{0em}{}[\titlerule]
+  \section{#1}
+  \vspace{-8pt}
+}
+
+% Header
+\newcommand{\header}[4]{
+  \begin{center}
+    {\Huge\textbf{#1}}\\[8pt]
+    {\large\faEnvelope\ #2 \ | \ \faPhone\ #3}\\
+    {\large\faLinkedin\ #4}
+  \end{center}
+}
+
+\begin{document}
+
+{{header}}
+
+\resumeSection{Research Interests}
+{{research_interests}}
+
+\resumeSection{Education}
+{{education}}
+
+\resumeSection{Publications}
+{{publications}}
+
+\resumeSection{Research Experience}
+{{research_experience}}
+
+\resumeSection{Teaching Experience}
+{{teaching_experience}}
+
+\resumeSection{Skills \& Expertise}
+{{skills}}
+
+\end{document}
