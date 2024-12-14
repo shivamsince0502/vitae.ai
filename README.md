@@ -1,4 +1,4 @@
-# Resume-AI-LaTeX
+# Vitae.ai
 
 An AI-powered resume builder that generates professional LaTeX resumes with real-time preview and editing capabilities. The application allows users to either upload their existing resume or fill out a form, and then uses AI to generate a beautifully formatted LaTeX resume with multiple template options.
 
