@@ -45,7 +45,7 @@ export function PDFPreview({ pdfUrl }: PDFPreviewProps) {
 		type='application/pdf'
 		src={pdfUrl}
 		/>
-    <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}></Document>
+    {/* <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}></Document> */}
     </div>
   );
 }

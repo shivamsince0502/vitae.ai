@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { analyzeAndGenerateResume } from '../services/ai.service';
+// import { analyzeAndGenerateResume } from '../services/ai.service';
 import { parseResume } from '../services/parser.service';
 import { getTemplates as getLatexTemplates, generateLatexResume } from '../services/latex.service';
 import { compileLaTeX, cleanupTemp } from '../services/compiler.service';
