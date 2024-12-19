@@ -11,7 +11,7 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Download, FileUp, FormInput, RefreshCw } from 'lucide-react';
 
 type Step = 'input-method' | 'upload' | 'form' | 'template' | 'result';
-
+const BASE_URL = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
 export default function ResumeBuilder() {
   const [currentStep, setCurrentStep] = useState<Step>('input-method');
   const [formData, setFormData] = useState<any>(null);
@@ -35,7 +35,7 @@ export default function ResumeBuilder() {
     setSelectedTemplate(templateId);
     setIsGenerating(true);
     try {
-      const response = await fetch('http://localhost:3002/api/resume/generate', {
+      const response = await fetch(BASE_URL+'/api/resume/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export default function ResumeBuilder() {
       const data = await response.json();
       if (data.success) {
         setLatexContent(data.latexContent);
-        setPdfUrl("http://localhost:3002" + data.pdfUrl);
+        setPdfUrl(BASE_URL+ data.pdfUrl);
         setCurrentStep('result');
       } else {
         throw new Error(data.message);
@@ -65,7 +65,7 @@ export default function ResumeBuilder() {
   const handleCompile = async () => {
     try {
       setIsCompiling(true);
-      const response = await fetch('http://localhost:3002/api/resume/compile', {
+      const response = await fetch(BASE_URL+'/api/resume/compile', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ export default function ResumeBuilder() {
       }
 
       const data = await response.json();
-      setPdfUrl("http://localhost:3002" + data.pdfUrl);
+      setPdfUrl(BASE_URL + data.pdfUrl);
     } catch (error) {
       console.error('Compilation error:', error);
       alert('Failed to compile LaTeX. Please check your code and try again.');

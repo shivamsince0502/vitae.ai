@@ -15,6 +15,8 @@ interface TemplateSelectorProps {
   onSelect: (templateId: string) => void;
 }
 
+const BASE_URL = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
+
 export default function TemplateSelector({ onSelect }: TemplateSelectorProps) {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +28,7 @@ export default function TemplateSelector({ onSelect }: TemplateSelectorProps) {
 
   const fetchTemplates = async () => {
     try {
-      const response = await fetch('http://localhost:3002/api/resume/templates');
+      const response = await fetch(BASE_URL+'/api/resume/templates');
       const data = await response.json();
       if (data.success) {
         setTemplates(data.templates);
@@ -80,7 +82,7 @@ export default function TemplateSelector({ onSelect }: TemplateSelectorProps) {
           >
             <div className="aspect-[3/4] relative">
               <img
-                src={"http://localhost:3002" + template.preview}
+                src={ BASE_URL+ template.preview}
                 alt={template.name}
                 className="absolute inset-0 w-full h-full object-cover"
               />

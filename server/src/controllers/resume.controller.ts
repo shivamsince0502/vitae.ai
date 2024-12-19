@@ -85,10 +85,10 @@ export const uploadResume = async (req: Request, res: Response) => {
 
 export const generateResume = async (req: Request, res: Response) => {
   try {
-    const { formData, templateId } = req.body;
+    const { resumeData, templateId } = req.body;
 
     // Validate input
-    if (!formData || !templateId) {
+    if (!resumeData || !templateId) {
       return res.status(400).json({ 
         success: false, 
         message: 'Missing form data or template ID' 
@@ -96,7 +96,7 @@ export const generateResume = async (req: Request, res: Response) => {
     }
 
     // Generate LaTeX content
-    const latexContent = await generateLatexResume(formData, templateId);
+    const latexContent = await generateLatexResume(resumeData, templateId);
 
     // Compile LaTeX to PDF
     const pdfPath = await compileLaTeX(latexContent);
@@ -140,6 +140,13 @@ export const compilePdf = async (req: Request, res: Response) => {
 
     // Create a URL for the PDF
     const pdfUrl = `/temp/${path.basename(pdfPath)}`;
+
+    // Set headers for PDF response
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
 
     // Schedule cleanup after 5 minutes
     setTimeout(() => {

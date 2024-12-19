@@ -6,6 +6,7 @@ import { PDFPreview } from '@/components/preview/PDFPreview';
 import { Button } from '@/components/ui/button';
 import { Download, RefreshCw } from 'lucide-react';
 
+const BASE_URL = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
 export default function ResumeEditPage() {
   const [latexContent, setLatexContent] = useState('');
   const [pdfUrl, setPdfUrl] = useState('');
@@ -14,7 +15,7 @@ export default function ResumeEditPage() {
   const handleCompile = async () => {
     try {
       setIsCompiling(true);
-      const response = await fetch('http://localhost:3002/api/resume/compile', {
+      const response = await fetch(BASE_URL+'/api/resume/compile', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

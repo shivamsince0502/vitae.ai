@@ -9,6 +9,7 @@ import { Education } from './steps/Education';
 import { Experience } from './steps/Experience';
 import { Skills } from './steps/Skills';
 import { Projects } from './steps/Projects';
+import { ArrowLeft, ArrowRight, FileText } from 'lucide-react';
 
 interface FormData {
   personalInfo: {
@@ -49,6 +50,10 @@ interface FormData {
   }>;
 }
 
+interface MultiStepFormProps {
+  onSubmit: (data: FormData) => void;
+}
+
 const initialFormData: FormData = {
   personalInfo: {
     fullName: '',
@@ -83,7 +88,7 @@ const initialFormData: FormData = {
   }],
 };
 
-export function MultiStepForm() {
+export function MultiStepForm({ onSubmit }: MultiStepFormProps) {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<FormData>(initialFormData);
@@ -92,6 +97,8 @@ export function MultiStepForm() {
   const steps = [
     {
       title: 'Personal Information',
+      description: 'Start with your basic contact details',
+      icon: <FileText className="w-5 h-5" />,
       component: (
         <PersonalInfo
           data={formData.personalInfo}
@@ -103,6 +110,8 @@ export function MultiStepForm() {
     },
     {
       title: 'Education',
+      description: 'Add your educational background',
+      icon: <FileText className="w-5 h-5" />,
       component: (
         <Education
           data={formData.education}
@@ -114,6 +123,8 @@ export function MultiStepForm() {
     },
     {
       title: 'Experience',
+      description: 'Share your work experience',
+      icon: <FileText className="w-5 h-5" />,
       component: (
         <Experience
           data={formData.experience}
@@ -125,6 +136,8 @@ export function MultiStepForm() {
     },
     {
       title: 'Skills',
+      description: 'List your technical and soft skills',
+      icon: <FileText className="w-5 h-5" />,
       component: (
         <Skills
           data={formData.skills}
@@ -136,6 +149,8 @@ export function MultiStepForm() {
     },
     {
       title: 'Projects',
+      description: 'Highlight your key projects',
+      icon: <FileText className="w-5 h-5" />,
       component: (
         <Projects
           data={formData.projects}
@@ -162,9 +177,7 @@ export function MultiStepForm() {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      // TODO: Send form data to API for LaTeX generation
-      console.log('Submitting form data:', formData);
-      router.push('/editor');
+      onSubmit(formData);
     } catch (error) {
       console.error('Error submitting form:', error);
     } finally {
@@ -173,11 +186,15 @@ export function MultiStepForm() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <div className="w-full">
+      {/* Progress Steps */}
       <div className="mb-8">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold">Create Your Resume</h1>
-          <span className="text-sm text-muted-foreground">
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-1">{steps[currentStep].title}</h2>
+            <p className="text-gray-400">{steps[currentStep].description}</p>
+          </div>
+          <span className="text-sm text-gray-400">
             Step {currentStep + 1} of {steps.length}
           </span>
         </div>
@@ -185,40 +202,53 @@ export function MultiStepForm() {
           {steps.map((step, index) => (
             <div
               key={step.title}
-              className={`flex-1 h-2 rounded-full ${
-                index <= currentStep ? 'bg-primary' : 'bg-muted'
+              className={`flex-1 h-1.5 rounded-full transition-all ${
+                index <= currentStep ? 'bg-sky-500' : 'bg-gray-700'
               }`}
             />
           ))}
         </div>
       </div>
 
+      {/* Form Content */}
       <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">{steps[currentStep].title}</h2>
         {isSubmitting ? (
-          <Loading text="Generating your resume..." />
+          <div className="flex flex-col items-center justify-center py-12">
+            <Loading className="w-8 h-8 text-sky-500" />
+            <p className="mt-4 text-gray-400">Generating your resume...</p>
+          </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-6">
             {steps[currentStep].component}
           </div>
         )}
       </div>
 
-      <div className="flex justify-between">
+      {/* Navigation Buttons */}
+      <div className="flex justify-between pt-4 border-t border-gray-800">
         <Button
           variant="outline"
           onClick={handlePrevious}
           disabled={currentStep === 0 || isSubmitting}
+          className="flex items-center gap-2"
         >
-          Previous
+          <ArrowLeft className="w-4 h-4" /> Previous
         </Button>
         {currentStep === steps.length - 1 ? (
-          <Button onClick={handleSubmit} disabled={isSubmitting}>
-            Generate Resume
+          <Button 
+            onClick={handleSubmit} 
+            disabled={isSubmitting}
+            className="bg-sky-500 hover:bg-sky-600 flex items-center gap-2"
+          >
+            Generate Resume <ArrowRight className="w-4 h-4" />
           </Button>
         ) : (
-          <Button onClick={handleNext} disabled={isSubmitting}>
-            Next
+          <Button 
+            onClick={handleNext} 
+            disabled={isSubmitting}
+            className="bg-sky-500 hover:bg-sky-600 flex items-center gap-2"
+          >
+            Next <ArrowRight className="w-4 h-4" />
           </Button>
         )}
       </div>

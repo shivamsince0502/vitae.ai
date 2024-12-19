@@ -49,3 +49,6 @@ firebase-debug.*.log*
 *.synctex.gz
 *.fls
 *.fdb_latexmk
+
+venv/
+server-python/

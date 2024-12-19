@@ -8,7 +8,7 @@ import { FileUp, FileText, X } from 'lucide-react';
 interface ResumeUploadProps {
   onUploadComplete: (parsedData: any) => void;
 }
-
+const BASE_URL = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
 export default function ResumeUpload({ onUploadComplete }: ResumeUploadProps) {
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -53,7 +53,7 @@ export default function ResumeUpload({ onUploadComplete }: ResumeUploadProps) {
         console.log('Form Data:', key, value);
       }
 
-      const response = await fetch('http://localhost:3002/api/resume/upload', {
+      const response = await fetch(BASE_URL+'/api/resume/upload', {
         method: 'POST',
         body: formData,
       });

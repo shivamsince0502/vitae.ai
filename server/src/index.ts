@@ -29,8 +29,19 @@ app.use(fileUpload({
   debug: true  // Add debug logging
 }));
 
-// Serve static files
-app.use('/temp', express.static(path.join(__dirname, 'temp')));
+// Serve static files with proper headers
+app.use('/temp', (req, res, next) => {
+  // Set headers for PDF files
+  if (req.path.endsWith('.pdf')) {
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  }
+  next();
+}, express.static(path.join(__dirname, 'temp')));
+
 app.use('/templates', express.static(path.join(__dirname, 'templates')));
 
 // Connect to MongoDB
