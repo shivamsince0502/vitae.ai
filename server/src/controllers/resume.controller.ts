@@ -141,13 +141,6 @@ export const compilePdf = async (req: Request, res: Response) => {
     // Create a URL for the PDF
     const pdfUrl = `/temp/${path.basename(pdfPath)}`;
 
-    // Set headers for PDF response
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'inline');
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
-
     // Schedule cleanup after 5 minutes
     setTimeout(() => {
       cleanupTemp().catch(console.error);
